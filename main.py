@@ -1,3 +1,4 @@
+import json
 import os
 import sqlite3
 
@@ -77,5 +78,18 @@ def categories():
     with open(CATEGORIES_PATH, "r", encoding="utf-8") as f:
         return f.read()
 
+
+@mcp.resource("info://server")
+def server_info() -> str:
+    """Get Information about this server."""
+    info = {
+        "name":"Expense Tracker",
+        "version":"1.0",
+        "description":"Expense Tracker MCP server",
+        "tools":["add_expense","list_expenses","summarize"],
+        "author":"Muhammad Yaseen Taha",
+    }
+
+    return json.dumps(info, indent=2)
 if __name__ == "__main__":
-    mcp.run()
+    mcp.run(transport="http",host="0.0.0.0",port=8000)
